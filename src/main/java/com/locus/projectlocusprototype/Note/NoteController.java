@@ -1,5 +1,6 @@
 package com.locus.projectlocusprototype.Note;
 
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,8 +19,8 @@ public class NoteController {
 
     // GET for a singular note
     @GetMapping(path = "/{noteId}")
-    public NoteResponse one(@PathVariable Long noteId){
-        return noteService.getNote(noteId);
+    public NoteResponse one(@PathVariable Long noteId, @Valid @RequestBody NoteRequest noteRequest){
+        return noteService.getNote(noteId,noteRequest);
     }
 
     // GET for all notes for a user
@@ -30,14 +31,14 @@ public class NoteController {
     // POST endpoint to create a note
     @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<NoteResponse> makeNote(@RequestBody NoteRequest note){
+    public ResponseEntity<NoteResponse> makeNote(@Valid  @RequestBody NoteRequest note){
         NoteResponse response = noteService.createNote(note);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     //PUT endpoint to update a note's title OR content
     @PutMapping("/{noteId}")
-    public ResponseEntity<NoteResponse> updateNote(@PathVariable Long noteId, @RequestBody NoteRequest noteContent){
+    public ResponseEntity<NoteResponse> updateNote(@PathVariable Long noteId, @Valid @RequestBody NoteRequest noteContent){
         NoteResponse response = noteService.updateNote(noteId,noteContent);
         return ResponseEntity.status(HttpStatus.OK).body(response);
 
@@ -45,8 +46,18 @@ public class NoteController {
 
     //DELETE endpoint to delete an existing note
     @DeleteMapping("/{noteId}")
-    public ResponseEntity<String> deleteNote(@PathVariable Long noteId){
-        noteService.deleteNote(noteId);
+    public ResponseEntity<String> deleteNote(@PathVariable Long noteId, @Valid @RequestBody NoteRequest noteRequest){
+        noteService.deleteNote(noteId,noteRequest);
         return ResponseEntity.status(HttpStatus.OK).body("Successfully deleted note with id " + noteId);
     }
+
+    //TODO: IMPLEMENT PATCH /api/notes/{noteId}/review ENDPOINT TO PROCESS REVIEWING
+    // USE A ReviewRequest DTO AS THE INPUT IN THE BODY WHICH TRIGGERS
+    // AN SM-2 CALCULATION THROUGH THE SpacedRepetitionService
+    @PatchMapping("/{noteId}/review")
+    public ResponseEntity<NoteResponse> reviewNote(@PathVariable Long noteId, @Valid @RequestBody ReviewRequest reviewContent){
+        NoteResponse response = noteService.reviewNote(noteId,reviewContent);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
 }
