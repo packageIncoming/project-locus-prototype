@@ -5,7 +5,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/notes")
@@ -19,7 +18,7 @@ public class NoteController {
 
     // GET for a singular note
     @GetMapping(path = "/{noteId}")
-    public Optional<Note> one(@PathVariable Long noteId){
+    public NoteResponse one(@PathVariable Long noteId){
         return noteService.getNote(noteId);
     }
 
@@ -31,16 +30,16 @@ public class NoteController {
     // POST endpoint to create a note
     @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<String> makeNote(@RequestBody Note note){
-        noteService.createNote(note);
-        return ResponseEntity.status(HttpStatus.CREATED).body("Successfully created note: " + note.getTitle());
+    public ResponseEntity<NoteResponse> makeNote(@RequestBody NoteRequest note){
+        NoteResponse response = noteService.createNote(note);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     //PUT endpoint to update a note's title OR content
     @PutMapping("/{noteId}")
-    public ResponseEntity<String> updateNote(@PathVariable Long noteId, @RequestBody Note noteContent){
-        noteService.updateNote(noteId,noteContent);
-        return ResponseEntity.status(HttpStatus.OK).body("Successfully update note with id " + noteId);
+    public ResponseEntity<NoteResponse> updateNote(@PathVariable Long noteId, @RequestBody NoteRequest noteContent){
+        NoteResponse response = noteService.updateNote(noteId,noteContent);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
 
     }
 

@@ -1,8 +1,8 @@
 package com.locus.projectlocusprototype.Note;
 
+import com.locus.projectlocusprototype.User.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
@@ -28,20 +28,23 @@ public class Note {
     @Setter
     private String content;
 
+
+
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="user_id",nullable = false)
     @Getter
     @Setter
-    @NotNull
-    private Long associatedUser;
+    private User user;
 
     @CreationTimestamp
     @Getter
     private Timestamp created;
 
 
-    public Note(String title, String content, Long associatedUser) {
+    public Note(String title, String content, User user) {
         this.title = title;
         this.content = content;
-        this.associatedUser = associatedUser;
+        this.user = user;
     }
 
     public Note() {
@@ -54,7 +57,6 @@ public class Note {
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", content='" + content + '\'' +
-                ", associatedUser=" + associatedUser +
                 ", created=" + created +
                 '}';
     }
