@@ -3,7 +3,6 @@ package com.locus.projectlocusprototype.Note;
 import com.locus.projectlocusprototype.Exceptions.ResourceNotFoundException;
 import com.locus.projectlocusprototype.User.User;
 import com.locus.projectlocusprototype.User.UserRepository;
-import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,12 +13,10 @@ import java.util.Optional;
 public class NoteService {
     private final NoteRepository noteRepository;
     private final UserRepository userRepository;
-    private final SpacedRepetitionService spacedRepetitionService;
 
-    public NoteService(NoteRepository noteRepository, UserRepository userRepository, SpacedRepetitionService spacedRepetitionService) {
+    public NoteService(NoteRepository noteRepository, UserRepository userRepository) {
         this.noteRepository = noteRepository;
         this.userRepository = userRepository;
-        this.spacedRepetitionService = spacedRepetitionService;
     }
 
     private NoteResponse noteToResponse(Note note){
@@ -28,12 +25,11 @@ public class NoteService {
                 note.getTitle(),
                 note.getContent(),
                 note.getUser().getUsername(),
-                note.getCreated(),
-                note.getNextReviewDate()
+                note.getCreated()//,
+                //note.getNextReviewDate()
         );
     }
 
-    // TODO: Modify to use a requesterId to make sure the right user is accessing the note
     public NoteResponse getNote(Long noteId,NoteRequest noteContent) {
         Optional<Note> note =  noteRepository.findNoteById(noteId);
         if (note.isPresent()){
@@ -109,24 +105,24 @@ public class NoteService {
 
     }
 
-    public NoteResponse reviewNote(Long noteId, ReviewRequest reviewContent) {
-        // check to make sure note exists
-        // check to make sure the user in reviewContent has access to this note
-        // If either the user does not have access OR the note does not exist, return a 404
-        //  the first case returns a 404 to prevent malicious requests from finding other users' content
-        Optional<Note> noteFind= noteRepository.findNoteById(noteId);
-        if (noteFind.isEmpty()){
-            throw new ResourceNotFoundException("ERROR: no note exists with id " + noteId);
-        }
-        Note note = noteFind.get();
-        // now we know the note exists, check if the user is correct
-        if (!Objects.equals(reviewContent.userId(), note.getUser().getId())){
-            throw new ResourceNotFoundException("ERROR: no note exists with id " + noteId);
-        }
-        // now we know the note exists AND the user is correct, review the note
-        spacedRepetitionService.judgeNote(note,reviewContent.qualityScore());
-        // now save the result and return the response
-        noteRepository.save(note);
-        return noteToResponse(note);
-    }
+//    public NoteResponse reviewNote(Long noteId, ReviewRequest reviewContent) {
+//        // check to make sure note exists
+//        // check to make sure the user in reviewContent has access to this note
+//        // If either the user does not have access OR the note does not exist, return a 404
+//        //  the first case returns a 404 to prevent malicious requests from finding other users' content
+//        Optional<Note> noteFind= noteRepository.findNoteById(noteId);
+//        if (noteFind.isEmpty()){
+//            throw new ResourceNotFoundException("ERROR: no note exists with id " + noteId);
+//        }
+//        Note note = noteFind.get();
+//        // now we know the note exists, check if the user is correct
+//        if (!Objects.equals(reviewContent.userId(), note.getUser().getId())){
+//            throw new ResourceNotFoundException("ERROR: no note exists with id " + noteId);
+//        }
+//        // now we know the note exists AND the user is correct, review the note
+//        spacedRepetitionService.judgeNote(note,reviewContent.qualityScore());
+//        // now save the result and return the response
+//        noteRepository.save(note);
+//        return noteToResponse(note);
+//    }
 }

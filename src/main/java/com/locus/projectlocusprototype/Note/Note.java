@@ -41,37 +41,19 @@ public class Note {
     @Getter
     private Timestamp created;
 
-    //review-related attributes:
-    @Getter
-    @Setter
-    private Double easeFactor; // EaseFactor used in SM-2 calculation
-    @Getter
-    @Setter
-    private Integer interval; // Interval of days until next review (Used in SM-2 Calculation)
-    @Getter
-    @Setter
-    private LocalDateTime nextReviewDate; // The actual localized date of when the user will next review
-    @Getter
-    @Setter
-    private Integer repetitions; // The number of successful repetitions the user has had (fail sets to 0)
 
 
     public Note(String title, String content, User user) {
         this.title = title;
         this.content = content;
         this.user = user;
-        this.easeFactor = 2.5;
-        this.interval=0;
-        this.repetitions = 0;
-        this.nextReviewDate = LocalDateTime.now();
+
     }
 
     public Note() {
-        this.easeFactor = 2.5;
-        this.interval=0;
-        this.repetitions = 0;
-        this.nextReviewDate = LocalDateTime.now();
+
     }
+
 
     @Override
     public String toString() {
