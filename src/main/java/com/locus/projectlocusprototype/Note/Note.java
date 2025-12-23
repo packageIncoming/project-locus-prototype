@@ -1,6 +1,7 @@
 package com.locus.projectlocusprototype.Note;
 
 import com.locus.projectlocusprototype.User.User;
+import com.locus.projectlocusprototype.Flashcard.Flashcard;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
@@ -9,6 +10,8 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name="notes")
@@ -27,6 +30,7 @@ public class Note {
 
     @Getter
     @Setter
+    @Column(length=1000)
     private String content;
 
 
@@ -41,7 +45,9 @@ public class Note {
     @Getter
     private Timestamp created;
 
-
+    @Getter
+    @OneToMany(mappedBy = "note", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Flashcard> flashcards = new HashSet<>();
 
     public Note(String title, String content, User user) {
         this.title = title;

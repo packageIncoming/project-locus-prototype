@@ -15,4 +15,5 @@ public interface NoteRepository extends JpaRepository<Note,Long> {
     Optional<Note> findNoteById(Long noteId);
 
     List<Note> getNotesByUser(User user);
+
 }

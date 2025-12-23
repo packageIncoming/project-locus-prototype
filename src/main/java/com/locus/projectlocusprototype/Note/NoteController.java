@@ -51,13 +51,6 @@ public class NoteController {
         return ResponseEntity.status(HttpStatus.OK).body("Successfully deleted note with id " + noteId);
     }
 
-//    //TODO: IMPLEMENT PATCH /api/notes/{noteId}/review ENDPOINT TO PROCESS REVIEWING
-//    // USE A ReviewRequest DTO AS THE INPUT IN THE BODY WHICH TRIGGERS
-//    // AN SM-2 CALCULATION THROUGH THE SpacedRepetitionService
-//    @PatchMapping("/{noteId}/review")
-//    public ResponseEntity<NoteResponse> reviewNote(@PathVariable Long noteId, @Valid @RequestBody ReviewRequest reviewContent){
-//        NoteResponse response = noteService.reviewNote(noteId,reviewContent);
-//        return ResponseEntity.status(HttpStatus.OK).body(response);
-//    }
+
 
 }

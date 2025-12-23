@@ -11,7 +11,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 @Configuration
 public class AIConfig {
-    @Value("${lotus.ai.api-key}")
+    @Value("${locus.ai.api-key}")
     private String API_KEY;
     @Bean
     public WebClient geminiWebClient(WebClient.Builder builder){
@@ -23,9 +23,9 @@ public class AIConfig {
         //THIS GENERATES A BARE-BONES WebClient THAT ONLY HAS THE CONTENT_TYPE AND API_KEY
         // WHEN CALLS ARE MADE TO THE GEMINI API, THAT IS WHEN THE REQUEST BODY WILL BE FILLED.
         return builder
-                .baseUrl("https://generativelanguage.googleapis.com/v1beta/models/gemma-3-12b:generateContent")
+                .baseUrl("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key="+API_KEY)
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .defaultHeader("x-goog-api-key",API_KEY)
+                .defaultHeader("X-goog-api-key",API_KEY)
                 .build();
     }
 }

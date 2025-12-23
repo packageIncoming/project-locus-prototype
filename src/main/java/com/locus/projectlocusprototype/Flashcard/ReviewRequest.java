@@ -1,4 +1,4 @@
-package com.locus.projectlocusprototype.Note;
+package com.locus.projectlocusprototype.Flashcard;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;

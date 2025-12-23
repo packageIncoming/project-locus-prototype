@@ -1,8 +1,10 @@
 package com.locus.projectlocusprototype.Note;
 
 import com.locus.projectlocusprototype.Exceptions.ResourceNotFoundException;
+import com.locus.projectlocusprototype.Flashcard.FlashcardService;
 import com.locus.projectlocusprototype.User.User;
 import com.locus.projectlocusprototype.User.UserRepository;
+import com.locus.projectlocusprototype.User.UserService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,10 +15,12 @@ import java.util.Optional;
 public class NoteService {
     private final NoteRepository noteRepository;
     private final UserRepository userRepository;
+    private final UserService userService;
 
-    public NoteService(NoteRepository noteRepository, UserRepository userRepository) {
+    public NoteService(NoteRepository noteRepository, UserRepository userRepository, FlashcardService flashcardService, UserService userService) {
         this.noteRepository = noteRepository;
         this.userRepository = userRepository;
+        this.userService = userService;
     }
 
     private NoteResponse noteToResponse(Note note){
@@ -25,22 +29,21 @@ public class NoteService {
                 note.getTitle(),
                 note.getContent(),
                 note.getUser().getUsername(),
-                note.getCreated()//,
-                //note.getNextReviewDate()
+                note.getCreated()
         );
     }
 
     public NoteResponse getNote(Long noteId,NoteRequest noteContent) {
-        Optional<Note> note =  noteRepository.findNoteById(noteId);
-        if (note.isPresent()){
-            if (!Objects.equals(noteContent.userId(), note.get().getUser().getId())) {
-                // Throw a NotFound rather than Access Denied in order to hide existing data from malicious/malformed requests
-                throw new ResourceNotFoundException("ERROR: Note with id " + noteId + " does not exist; cannot be updated");
-            }
-            return noteToResponse(note.get());
-        }  else {
-            throw new ResourceNotFoundException("ERROR: no note exists with id " + noteId);
-        }
+        userService.validateNoteRequest(noteId,noteContent);
+        Note note =  noteRepository.getReferenceById(noteId);
+        return noteToResponse(note);
+    }
+
+    public NoteResponse getNote(Long noteId,Long userId) {
+        NoteRequest noteContent = new NoteRequest("temporary value", "temporary value", userId);
+        userService.validateNoteRequest(noteId,noteContent);
+        Note note =  noteRepository.getReferenceById(noteId);
+        return noteToResponse(note);
     }
 
     public NoteResponse createNote(NoteRequest request) {
@@ -62,12 +65,8 @@ public class NoteService {
         return noteToResponse(note);
     }
     public NoteResponse updateNote(Long noteId, NoteRequest noteContent) {
-        //make sure note exists
-        Optional<Note> note = noteRepository.findNoteById(noteId);
-        if (note.isEmpty()) {
-            throw new ResourceNotFoundException("ERROR: Note with id " + noteId + " does not exist; cannot be updated");
-        }
-        Note obj = note.get();
+        userService.validateNoteRequest(noteId,noteContent);
+        Note obj =  noteRepository.getReferenceById(noteId);
         // check if noteContent has title and/or content
         if (!noteContent.title().isBlank()){
             obj.setTitle(noteContent.title());
@@ -75,23 +74,13 @@ public class NoteService {
         if(!noteContent.content().isBlank() && noteContent.content().length()>=10){
             obj.setContent(noteContent.content());
         }
-        if (!Objects.equals(noteContent.userId(), obj.getUser().getId())) {
-            // Throw a NotFound rather than Access Denied in order to hide existing data from malicious/malformed requests
-            throw new ResourceNotFoundException("ERROR: Note with id " + noteId + " does not exist; cannot be updated");
-        }
+
         noteRepository.save(obj);
         return noteToResponse(obj);
     }
     public void deleteNote(Long noteId, NoteRequest noteContent) {
-        Optional<Note> note = noteRepository.findNoteById(noteId);
-        if (note.isEmpty()) {
-            throw new ResourceNotFoundException("ERROR: Note with id " + noteId + " does not exist; cannot be deleted");
-        }
-        Note obj = note.get();
-        if (!Objects.equals(noteContent.userId(), obj.getUser().getId())) {
-            // Throw a NotFound rather than Access Denied in order to hide existing data from malicious/malformed requests
-            throw new ResourceNotFoundException("ERROR: Note with id " + noteId + " does not exist; cannot be updated");
-        }
+        userService.validateNoteRequest(noteId,noteContent);
+        Note obj =  noteRepository.getReferenceById(noteId);
         noteRepository.delete(obj);
     }
 
@@ -105,24 +94,5 @@ public class NoteService {
 
     }
 
-//    public NoteResponse reviewNote(Long noteId, ReviewRequest reviewContent) {
-//        // check to make sure note exists
-//        // check to make sure the user in reviewContent has access to this note
-//        // If either the user does not have access OR the note does not exist, return a 404
-//        //  the first case returns a 404 to prevent malicious requests from finding other users' content
-//        Optional<Note> noteFind= noteRepository.findNoteById(noteId);
-//        if (noteFind.isEmpty()){
-//            throw new ResourceNotFoundException("ERROR: no note exists with id " + noteId);
-//        }
-//        Note note = noteFind.get();
-//        // now we know the note exists, check if the user is correct
-//        if (!Objects.equals(reviewContent.userId(), note.getUser().getId())){
-//            throw new ResourceNotFoundException("ERROR: no note exists with id " + noteId);
-//        }
-//        // now we know the note exists AND the user is correct, review the note
-//        spacedRepetitionService.judgeNote(note,reviewContent.qualityScore());
-//        // now save the result and return the response
-//        noteRepository.save(note);
-//        return noteToResponse(note);
-//    }
+
 }
