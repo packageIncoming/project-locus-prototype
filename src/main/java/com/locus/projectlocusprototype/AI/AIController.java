@@ -3,6 +3,7 @@ package com.locus.projectlocusprototype.AI;
 import com.locus.projectlocusprototype.Flashcard.FlashcardResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,11 +20,10 @@ public class AIController {
         this.aIService = aIService;
     }
 
-    // TODO: POST Mapping that generates flashcards
     @PostMapping()
-    public ResponseEntity<List<FlashcardResponse>> generate(@RequestBody  AIRequest request){
-        System.out.println(request.noteId());
-        List<FlashcardResponse> response = aIService.generateFlashcards(request);
+    public ResponseEntity<List<FlashcardResponse>> generate(@RequestBody  AIRequest request,
+                                                            Authentication authentication){
+        List<FlashcardResponse> response = aIService.generateFlashcards(request,authentication);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }

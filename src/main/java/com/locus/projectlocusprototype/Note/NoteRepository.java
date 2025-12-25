@@ -1,6 +1,7 @@
 package com.locus.projectlocusprototype.Note;
 
-import com.locus.projectlocusprototype.User.User;
+import com.locus.projectlocusprototype.Auth.User;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -16,4 +17,6 @@ public interface NoteRepository extends JpaRepository<Note,Long> {
 
     List<Note> getNotesByUser(User user);
 
+    @Query("SELECT n FROM Note n WHERE n.user = ?1 AND  n.title = ?2")
+    Optional<Note> findExistingNoteForUserWithTitle(User user, @NotBlank String title);
 }

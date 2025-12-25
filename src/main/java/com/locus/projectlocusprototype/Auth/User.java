@@ -1,5 +1,6 @@
-package com.locus.projectlocusprototype.User;
+package com.locus.projectlocusprototype.Auth;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -20,6 +21,13 @@ public class User {
     @Setter
     @Size(min=5)
     private String username;
+
+    @NotNull
+    @Getter
+    @Setter
+    @JsonIgnore
+    private String password;
+
 
     @NotNull
     @Getter

@@ -1,6 +1,6 @@
 package com.locus.projectlocusprototype.Flashcard;
 
-import com.locus.projectlocusprototype.User.User;
+import com.locus.projectlocusprototype.Auth.User;
 import com.locus.projectlocusprototype.Note.Note;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
@@ -62,6 +62,10 @@ public class Flashcard {
         this.back = back;
         this.nextReviewDate = LocalDateTime.now();
         this.user = user;
+        this.easeFactor = easeFactor;
+        this.interval = interval;
+        this.nextReviewDate = nextReviewDate;
+        this.repetitions = repetitions;
     }
 
     public Flashcard(Note note, User user, String back, String front) {

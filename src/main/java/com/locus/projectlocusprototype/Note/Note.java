@@ -1,6 +1,6 @@
 package com.locus.projectlocusprototype.Note;
 
-import com.locus.projectlocusprototype.User.User;
+import com.locus.projectlocusprototype.Auth.User;
 import com.locus.projectlocusprototype.Flashcard.Flashcard;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
@@ -9,7 +9,6 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -47,7 +46,7 @@ public class Note {
 
     @Getter
     @OneToMany(mappedBy = "note", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Flashcard> flashcards = new HashSet<>();
+    private final Set<Flashcard> flashcards = new HashSet<>();
 
     public Note(String title, String content, User user) {
         this.title = title;

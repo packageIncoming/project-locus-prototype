@@ -10,7 +10,7 @@ public record GeminiResponse(List<Candidate> candidates) {
 
     public String extractText() {
         if (candidates != null && !candidates.isEmpty()) {
-            return candidates.get(0).content().parts().get(0).text();
+            return candidates.getFirst().content().parts().getFirst().text();
         }
         return "";
     }

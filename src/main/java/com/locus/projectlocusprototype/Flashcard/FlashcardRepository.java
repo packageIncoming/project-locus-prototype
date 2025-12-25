@@ -1,7 +1,7 @@
 package com.locus.projectlocusprototype.Flashcard;
 
 import com.locus.projectlocusprototype.Note.Note;
-import com.locus.projectlocusprototype.User.User;
+import com.locus.projectlocusprototype.Auth.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
