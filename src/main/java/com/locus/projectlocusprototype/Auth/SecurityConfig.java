@@ -31,7 +31,11 @@ public class SecurityConfig {
                 // set auth endpoints as public and all others as private (jwt required)
                 .authorizeHttpRequests(
                         request->
-                                request.requestMatchers("/api/auth/**","/swagger-ui/**","/api-docs/**")
+                                request.requestMatchers(
+                                                "/api/auth/**",
+                                                "/swagger-ui/**",
+                                                "/v3/api-docs/**",
+                                                "/swagger-ui.html")
                                         .permitAll()
                                         .anyRequest().authenticated()
                 )
