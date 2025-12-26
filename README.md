@@ -2,7 +2,7 @@
 
 > AI-powered spaced repetition system for automated flashcard generation and intelligent review scheduling
 
-**[Live API](https://project-locus-prototype-production.up.railway.app)** | **[API Docs](https://project-locus-prototype-production.up.railway.app/swagger-ui.html)** | **[Demo Video](#demo)**
+**[Live API](https://project-locus-prototype-production.up.railway.app)** | **[API Docs](https://project-locus-prototype-production.up.railway.app/swagger-ui.html)** | **[Demo Video](#demo))**
 
 [![Java](https://img.shields.io/badge/Java-21-orange.svg)](https://openjdk.org/)
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-4.0.1-brightgreen.svg)](https://spring.io/projects/spring-boot)
@@ -227,7 +227,18 @@ Authorization: Bearer <jwt_token>
 ```
 
 ---
+## Demo
 
+[![Demonstration Video](https://cdn.loom.com/sessions/thumbnails/85fc4f2752b34f45aff4d799e6e3526e-ade7db5bcb4a727c-full-play.gif#t=0.1)](https://www.loom.com/share/85fc4f2752b34f45aff4d799e6e3526e)
+
+
+**Demo shows:**
+1. User registration and login
+2. Creating a note with study material
+3. CRUD operations for notes and flashcards
+4. AI generating flashcards automatically
+5. Reviewing a flashcard (SM-2 algorithm updating intervals)
+6. Data aggregation by user (notecards and flashcards)
 ---
 
 ## Local Development Setup
