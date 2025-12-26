@@ -12,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFilter;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -33,10 +34,13 @@ public class SecurityConfig {
                         request->
                                 request.requestMatchers(
                                                 "/api/auth/**",
-                                                "/api/auth/**",
                                                 "/swagger-ui/**",
+                                                "/swagger-ui.html",
                                                 "/v3/api-docs/**",
-                                                "/swagger-ui.html")
+                                                "/swagger-resources/**", // Needed for UI resources
+                                                "/webjars/**",           // Needed for UI assets
+                                                "/error"                 // ALLOWS 404s TO SHOW INSTEAD OF 403s
+                                        )
                                         .permitAll()
                                         .anyRequest().authenticated()
                 )
@@ -45,7 +49,7 @@ public class SecurityConfig {
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 // enable jwtAuthenticationFilter
-                .addFilterBefore(jwtAuthenticationFilter, AuthenticationFilter.class)
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
         ;
         return http.build();
     }
