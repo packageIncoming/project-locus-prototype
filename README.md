@@ -2,7 +2,7 @@
 
 > AI-powered spaced repetition system for automated flashcard generation and intelligent review scheduling
 
-**[Live API](https://project-locus-prototype-production.up.railway.app)** | **[API Docs](https://project-locus-prototype-production.up.railway.app/swagger-ui.html)** | **[Demo Video](Demo)**
+**[Live API](https://project-locus-prototype-production.up.railway.app)** | **[API Docs](https://project-locus-prototype-production.up.railway.app/swagger-ui.html)** | **[Demo Video](#demo))**
 
 [![Java](https://img.shields.io/badge/Java-21-orange.svg)](https://openjdk.org/)
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-4.0.1-brightgreen.svg)](https://spring.io/projects/spring-boot)
