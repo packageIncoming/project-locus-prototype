@@ -141,6 +141,7 @@ public class FlashcardService {
         if (request.back() != null  && !request.back().isEmpty()){
             flashcard.setBack(request.back());
         }
+        flashcardRepository.save(flashcard);
         return flashcardToResponse(flashcard);
     }
 
