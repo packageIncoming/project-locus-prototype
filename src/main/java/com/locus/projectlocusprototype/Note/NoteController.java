@@ -1,12 +1,12 @@
 package com.locus.projectlocusprototype.Note;
 
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/notes")
@@ -26,8 +26,10 @@ public class NoteController {
 
     //  GET for all notes for a user
     @GetMapping("/usernotes")
-    public List<NoteResponse> userNotes(Authentication authentication){
-        return noteService.getAllNotesForUser(authentication);
+    public ResponseEntity<Page<NoteResponse>> userNotes(@RequestParam(defaultValue = "0") int page,
+                                                        @RequestParam(defaultValue = "20") int size,
+                                                        Authentication authentication){
+        return ResponseEntity.status(HttpStatus.OK).body(noteService.getAllNotesForUser(page,size,authentication));
     }
 
     //  POST endpoint to create a note

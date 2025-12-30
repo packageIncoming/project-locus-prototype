@@ -4,11 +4,14 @@ import com.locus.projectlocusprototype.Exceptions.InvalidNoteRequestException;
 import com.locus.projectlocusprototype.Exceptions.ResourceNotFoundException;
 import com.locus.projectlocusprototype.Auth.User;
 import com.locus.projectlocusprototype.Auth.AuthService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 
 @Service
 public class NoteService {
@@ -129,9 +132,10 @@ public class NoteService {
     }
 
     //  Get all the notes for a user by Authentication object
-    public List<NoteResponse> getAllNotesForUser(Authentication authentication) {
+    public Page<NoteResponse> getAllNotesForUser(int page, int size, Authentication authentication) {
         User user = authService.getUserFromAuthenticationObject(authentication);
-        return noteRepository.getNotesByUser(user).stream().map(this::noteToResponse).toList();
+        Pageable pageable = PageRequest.of(page, size, Sort.by("created").descending());
+        return noteRepository.getNotesByUser(user,pageable).map(this::noteToResponse);
     }
 
 }

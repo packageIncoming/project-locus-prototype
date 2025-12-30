@@ -7,10 +7,13 @@ import com.locus.projectlocusprototype.Auth.User;
 import com.locus.projectlocusprototype.Auth.AuthService;
 import jakarta.validation.Valid;
 import org.jspecify.annotations.NonNull;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 
 @Service
 public class FlashcardService {
@@ -66,7 +69,7 @@ public class FlashcardService {
     }
 
     //  Get all flashcards for a single note
-    public List<FlashcardResponse> getFlashcardsForNote(Long noteId, Authentication authentication) {
+    public Page<FlashcardResponse> getFlashcardsForNote(Long noteId, int page, int size, Authentication authentication) {
         //  Get the note
         Note note = noteRepository.findNoteById(noteId).orElseThrow(
                 ()->new ResourceNotFoundException("ERROR: Note with id" + noteId + " does not exist")
@@ -77,18 +80,22 @@ public class FlashcardService {
 
         //  Check if this user owns this note, and if so return all flashcards that belong to this note
         if(note.getUser().equals(user)){
-            return flashcardRepository.findFlashcardsByNote(note).stream().map(
+            Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
+
+            return flashcardRepository.findFlashcardsByNote(note,pageable).map(
                     this::flashcardToResponse
-            ).toList();
+            );
         } else {
             throw new ResourceNotFoundException("ERROR: Note with id" + noteId + " does not exist");
         }
     }
 
     //  Get all flashcards for a user through the authentication object
-    public List<FlashcardResponse> getFlashcardsForUser(Authentication authentication) {
+    public Page<FlashcardResponse> getFlashcardsForUser(int page, int size, Authentication authentication) {
         User user = authService.getUserFromAuthenticationObject(authentication);
-        return flashcardRepository.findFlashcardsByUser(user).stream().map(this::flashcardToResponse).toList();
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
+        return flashcardRepository.findFlashcardsByUser(user,pageable).map(this::flashcardToResponse);
     }
 
     //  Create a single flashcard for a user

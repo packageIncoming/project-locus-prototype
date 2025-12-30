@@ -80,6 +80,7 @@ public class AIService {
         }
 
 
+
         String promptText = String.format(
                 "Generate %d flashcards for the topic '%s'.\n\nSOURCE CONTENT:\n%s",
                 request.count(), note.getTitle(), note.getContent()

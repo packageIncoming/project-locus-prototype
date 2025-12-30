@@ -1,12 +1,12 @@
 package com.locus.projectlocusprototype.Flashcard;
 
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/flashcards")
@@ -27,16 +27,20 @@ public class FlashcardController {
 
     //  GET mapping to get all flashcards for a single note
     @GetMapping("/bynote/{noteId}")
-    public ResponseEntity<List<FlashcardResponse>> allForNote(@PathVariable Long noteId,
+    public ResponseEntity<Page<FlashcardResponse>> allForNote(@RequestParam(defaultValue = "0") int page,
+                                                              @RequestParam(defaultValue = "20") int size,
+                                                              @PathVariable Long noteId,
                                                               Authentication authentication){
-        List<FlashcardResponse> response = flashcardService.getFlashcardsForNote(noteId,authentication);
+        Page<FlashcardResponse> response = flashcardService.getFlashcardsForNote(noteId,page,size,authentication);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     //  GET mapping to get all flashcards for a user
     @GetMapping("/byuser")
-    public ResponseEntity<List<FlashcardResponse>> allForUser(Authentication authentication){
-        List<FlashcardResponse> response = flashcardService.getFlashcardsForUser(authentication);
+    public ResponseEntity<Page<FlashcardResponse>> allForUser(@RequestParam(defaultValue = "0") int page,
+                                              @RequestParam(defaultValue = "20") int size,
+                                              Authentication authentication){
+        Page<FlashcardResponse> response = flashcardService.getFlashcardsForUser(page,size,authentication);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
